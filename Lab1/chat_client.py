@@ -37,7 +37,7 @@ if __name__ == "__main__":
             send (client, message)
             received_message = receive(client)
             if received_message:
-                print (f"Received: {received_message}")
+                print (f"{received_message}")
             message = input()
 
     except KeyboardInterrupt:

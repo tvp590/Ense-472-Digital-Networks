@@ -23,7 +23,7 @@ def handle_client(conn, addr, server_active):
                 message = message_encoded.decode(FORMAT)
                 if message != DISCONNECT_MESSAGE:
                     print (f"[{addr}] {message}")
-                    send(conn, message)
+                    send(conn, f"[{addr}] {message}")
                 else:
                     connected = False
         except socket.timeout:
