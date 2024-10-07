@@ -8,6 +8,7 @@ TCP_ADDR = (SERVER_IP, PORT)
 FORMAT = 'utf-8'
 DISCONNECT_MESSAGE = "!Q"
 HEADER_SIZE_IN_BYTES = 8
+client_sockets = []
 
 # one instance of this will run for each client in a thread
 def handle_client(conn, addr, server_active):
@@ -23,7 +24,7 @@ def handle_client(conn, addr, server_active):
                 message = message_encoded.decode(FORMAT)
                 if message != DISCONNECT_MESSAGE:
                     print (f"[{addr}] {message}")
-                    send(conn, f"[{addr}] {message}")
+                    sendAll(message_length_encoded, message_encoded, conn)
                 else:
                     connected = False
         except socket.timeout:
@@ -43,6 +44,11 @@ def send(conn, message):
     conn.send(padded_message_send_length)
     conn.send(message_encoded)
 
+def sendAll(length, message, except_conn):
+    for i in client_sockets:
+        if i != except_conn:
+            i.send(length)
+            i.send(message)
 
 
 if __name__ == "__main__":
@@ -65,6 +71,7 @@ if __name__ == "__main__":
                 thread.start()
                 threads.append(thread)
                 print (f"[ACTIVE CONNECTIONS] {threading.active_count() - 1}")
+                client_sockets.append(conn)
             except socket.timeout:
                 pass
     except KeyboardInterrupt:
