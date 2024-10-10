@@ -27,7 +27,7 @@ def receive(sock,addr):
             if message_length:
                 message_length = int(message_length)
                 message = sock.recv(message_length).decode(FORMAT)
-                print (f"[{addr}] {message}")
+                print (f"{message}")
         except:
             break
 
@@ -51,5 +51,5 @@ if __name__ == "__main__":
     except KeyboardInterrupt:
         pass
 
-    send(client, DISCONNECT_MESSAGE, client_address)
+    send(client, DISCONNECT_MESSAGE)
     client.close()
